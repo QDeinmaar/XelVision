@@ -7,6 +7,9 @@
 #include <tchar.h>
 
 using namespace std;
+DWORD dwPriorityClass;
+HANDLE hProcessSnap;
+PROCESSENTRY32 pe32;
 
 BOOL GetProcessList( );
 BOOL ListProcessModules( DWORD dwPID );

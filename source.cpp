@@ -2,8 +2,6 @@
  
 BOOL ProcessList()
 {
-    HANDLE hProcessSnap;
-    PROCESSENTRY32 pe32;
 
     hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 
@@ -13,7 +11,7 @@ BOOL ProcessList()
         return (FALSE);
     }
 
-    pe32.dwSize = sizeof ( PROCESSENTRY32 );
+    pe32.dwSize = sizeof(PROCESSENTRY32);
 
     if( !Process32First(hProcessSnap , &pe32)){
 
@@ -28,6 +26,24 @@ BOOL ProcessList()
         _tprintf( TEXT("\nPROCESS NAME:  %s"), pe32.szExeFile );
         _tprintf( TEXT("\n-------------------------------------------------------"));
 
+        dwPriorityClass = 0;
+        hProcessSnap = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pe32.th32ProcessID);
+
+        if(hProcessSnap == NULL)
+        {
+            _tprintf(TEXT("OpenProcess !"));
+        } 
+        else 
+        {
+            dwPriorityClass = GetPriorityClass(hProcessSnap);
+            if(!dwPriorityClass)
+            {
+                _tprintf(TEXT("dwPriorityClass!"));
+                CloseHandle(hProcessSnap);
+            }
+        }
+
+        
     }
-    while();
+    while(Process32Next(hProcessSnap, &pe32));
 }
