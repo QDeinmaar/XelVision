@@ -1,8 +1,31 @@
 #include "headers.h"
- 
-BOOL ProcessList()
-{
 
+DWORD dwPriorityClass;
+HANDLE hProcessSnap;
+PROCESSENTRY32 pe32;
+
+
+void print_error(TCHAR const* msg){
+     _tprintf(_T("Error: %s\n"), msg);
+}
+
+
+BOOL ListProcessModules(DWORD dwPID)
+{
+    _tprintf(TEXT("ListProcessModules not implemented for PID %lu\n"), dwPID);
+    return TRUE; // indicate success
+}
+
+BOOL ListProcessThreads(DWORD dwPID)
+{
+    _tprintf(TEXT("ListProcessThreads not implemented for PID %lu\n"), dwPID);
+    return TRUE; // indicate success
+}
+
+
+
+BOOL GetProcessList()
+{
     hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 
     if(hProcessSnap == INVALID_HANDLE_VALUE) 
@@ -22,7 +45,7 @@ BOOL ProcessList()
 
     do 
     {
-        _tprintf("\n\n-------------------------------------------------------");
+        _tprintf(TEXT("\n\n-------------------------------------------------------"));
         _tprintf( TEXT("\nPROCESS NAME:  %s"), pe32.szExeFile );
         _tprintf( TEXT("\n-------------------------------------------------------"));
 
@@ -81,8 +104,8 @@ BOOL ProcessList()
         }
         _tprintf( TEXT("\n  Full Path        =  %s"), FullPath);
 
-        ListProcessModules(pe32.th32ProcessID);
-        ListProcessThreads(pe32.th32ProcessID);
+        ListProcessModules( pe32.th32ProcessID );
+        ListProcessThreads( pe32.th32ProcessID );
         delete[] FullPath;
     }
     while(Process32Next(hProcessSnap, &pe32));
