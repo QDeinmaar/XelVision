@@ -29,11 +29,13 @@ BOOL ProcessList()
         dwPriorityClass = 0;
         HANDLE hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pe32.th32ProcessID);
 
-        TCHAR FullPath[MAX_PATH] = TEXT("N/A");
+        DWORD size = 512;
+        LPTSTR FullPath = new TCHAR[size];
+        _tcscpy_s(FullPath, size, TEXT("N/A"));
 
         if(hProcess == NULL)
         {
-             _tcscpy_s(FullPath, TEXT("OpenProcess !")); 
+            _tcscpy_s(FullPath, size, TEXT("OpenProcess !")); 
         } 
         else 
         {
@@ -41,28 +43,49 @@ BOOL ProcessList()
 
             if(!dwPriorityClass)
             {
-                _tcscpy_s(FullPath,TEXT("dwPriorityClass!"));
+                _tprintf(TEXT("Priority Class !"));
             }
 
             DWORD size = MAX_PATH;
 
             if(!QueryFullProcessImageName(hProcess, 0, FullPath, &size))
             {
-                    _tcscpy_s(FullPath, TEXT("ACCESS DENIED"));
+              if(GetLastError() == ERROR_INSUFFICIENT_BUFFER)
+              {
+                delete[] FullPath;
+                size *= 2;
+                FullPath = new TCHAR[size];
+
+                if(!QueryFullProcessImageName(hProcessSnap, 0, FullPath, &size))
+                {
+                    _tcscpy_s(FullPath, size, TEXT("ACCES DENIED !"));
+                }
+              }
+              else
+              {
+                    _tcscpy_s(FullPath, size, TEXT("ACCESS DENIED !"));
+              }
             }
                 CloseHandle(hProcess); 
         }
 
-        _tprintf( TEXT("\n  Process ID        = 0x%08X"), pe32.th32ProcessID );
-        _tprintf( TEXT("\n  Thread count      = %d"),   pe32.cntThreads );
-        _tprintf( TEXT("\n  Parent process ID = 0x%08X"), pe32.th32ParentProcessID );
-        _tprintf( TEXT("\n  Priority base     = %d"), pe32.pcPriClassBase );
+            _tprintf( TEXT("\n  Process ID        = 0x%08X"), pe32.th32ProcessID );
+            _tprintf( TEXT("\n  Thread count      = %d"),   pe32.cntThreads );
+            _tprintf( TEXT("\n  Parent process ID = 0x%08X"), pe32.th32ParentProcessID );
+            _tprintf( TEXT("\n  Priority base     = %d"), pe32.pcPriClassBase );
         if(dwPriorityClass)
-        _tprintf(TEXT("\n   Priority Class    = %d"), dwPriorityClass);
+        {
+            _tprintf(TEXT("\n   Priority Class    = %d"), dwPriorityClass);
+        } 
+        else
+        {
+            _tprintf(TEXT("\n Priority Class Error !"));
+        }
         _tprintf( TEXT("\n  Full Path        =  %s"), FullPath);
 
         ListProcessModules(pe32.th32ProcessID);
         ListProcessThreads(pe32.th32ProcessID);
+        delete[] FullPath;
     }
     while(Process32Next(hProcessSnap, &pe32));
     CloseHandle(hProcessSnap);
