@@ -46,8 +46,6 @@ BOOL ProcessList()
                 _tprintf(TEXT("Priority Class !"));
             }
 
-            DWORD size = MAX_PATH;
-
             if(!QueryFullProcessImageName(hProcess, 0, FullPath, &size))
             {
               if(GetLastError() == ERROR_INSUFFICIENT_BUFFER)
