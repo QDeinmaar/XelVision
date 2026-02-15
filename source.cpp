@@ -13,13 +13,13 @@ void print_error(TCHAR const* msg){
 BOOL ListProcessModules(DWORD dwPID)
 {
     _tprintf(TEXT("ListProcessModules not implemented for PID %lu\n"), dwPID);
-    return TRUE; // indicate success
+    return TRUE; 
 }
 
 BOOL ListProcessThreads(DWORD dwPID)
 {
     _tprintf(TEXT("ListProcessThreads not implemented for PID %lu\n"), dwPID);
-    return TRUE; // indicate success
+    return TRUE; 
 }
 
 
