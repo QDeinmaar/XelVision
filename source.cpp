@@ -27,23 +27,44 @@ BOOL ProcessList()
         _tprintf( TEXT("\n-------------------------------------------------------"));
 
         dwPriorityClass = 0;
-        hProcessSnap = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pe32.th32ProcessID);
+        HANDLE hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pe32.th32ProcessID);
 
-        if(hProcessSnap == NULL)
+        TCHAR FullPath[MAX_PATH] = TEXT("N/A");
+
+        if(hProcess == NULL)
         {
-            _tprintf(TEXT("OpenProcess !"));
+             _tcscpy_s(FullPath, TEXT("OpenProcess !")); 
         } 
         else 
         {
-            dwPriorityClass = GetPriorityClass(hProcessSnap);
+            dwPriorityClass = GetPriorityClass(hProcess);
+
             if(!dwPriorityClass)
             {
-                _tprintf(TEXT("dwPriorityClass!"));
-                CloseHandle(hProcessSnap);
+                _tcscpy_s(FullPath,TEXT("dwPriorityClass!"));
             }
+
+            DWORD size = MAX_PATH;
+
+            if(!QueryFullProcessImageName(hProcess, 0, FullPath, &size))
+            {
+                    _tcscpy_s(FullPath, TEXT("ACCESS DENIED"));
+            }
+                CloseHandle(hProcess); 
         }
 
-        
+        _tprintf( TEXT("\n  Process ID        = 0x%08X"), pe32.th32ProcessID );
+        _tprintf( TEXT("\n  Thread count      = %d"),   pe32.cntThreads );
+        _tprintf( TEXT("\n  Parent process ID = 0x%08X"), pe32.th32ParentProcessID );
+        _tprintf( TEXT("\n  Priority base     = %d"), pe32.pcPriClassBase );
+        if(dwPriorityClass)
+        _tprintf(TEXT("\n   Priority Class    = %d"), dwPriorityClass);
+        _tprintf( TEXT("\n  Full Path        =  %s"), FullPath);
+
+        ListProcessModules(pe32.th32ProcessID);
+        ListProcessThreads(pe32.th32ProcessID);
     }
     while(Process32Next(hProcessSnap, &pe32));
+    CloseHandle(hProcessSnap);
+    return(TRUE);
 }
