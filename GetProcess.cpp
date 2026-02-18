@@ -102,7 +102,7 @@ BOOL GetProcessList()
         {
             _tprintf(TEXT("\n Priority Class Error !"));
         }
-        _tprintf( TEXT("\n  Full Path        =  %s"), FullPath);
+        _tprintf( TEXT("\n  Full Path        =  %s\n"), FullPath);
 
         ListProcessModules( pe32.th32ProcessID );
         ListProcessThreads( pe32.th32ProcessID );

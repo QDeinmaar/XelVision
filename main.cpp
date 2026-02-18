@@ -1,5 +1,26 @@
 #include "headers.h"
 
+#include "headers.h"
+
+int _tmain(int argc, TCHAR* argv[])
+{
+    while(TRUE)
+    {
+        if(GetProcessList())
+        {
+            _tprintf(TEXT("\nProcess listing completed successfully.\n"));
+        }
+        else
+        {
+            _tprintf(TEXT("\nProcess listing failed.\n"));
+        }
+
+        Sleep(2000); // wait 2 seconds
+    }
+
+    return 0;
+}
+/*
 BOOL GetProcessList( );
 
 int _tmain(int argc, TCHAR* argv[])
@@ -15,7 +36,7 @@ int _tmain(int argc, TCHAR* argv[])
 
     return 0;
 }
-
+*/
 
 
 

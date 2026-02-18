@@ -9,7 +9,7 @@
 
 using namespace std;
 
-// Global variables (defined in one source file)
+// Global variables 
 extern DWORD dwPriorityClass;
 extern HANDLE hProcessSnap;
 extern PROCESSENTRY32 pe32;
