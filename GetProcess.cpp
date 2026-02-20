@@ -1,9 +1,8 @@
 #include "headers.h"
 
-DWORD dwPriorityClass;
-HANDLE hProcessSnap;
-PROCESSENTRY32 pe32;
-
+DWORD dwPriorityClass = 0;
+HANDLE hProcessSnap = NULL;
+PROCESSENTRY32 pe32 = {};
 
 void print_error(TCHAR const* msg){
      _tprintf(_T("Error: %s\n"), msg);
@@ -21,7 +20,6 @@ BOOL ListProcessThreads(DWORD dwPID)
     _tprintf(TEXT("ListProcessThreads not implemented for PID %lu\n"), dwPID);
     return TRUE; 
 }
-
 
 
 BOOL GetProcessList()
