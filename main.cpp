@@ -1,7 +1,5 @@
 #include "headers.h"
 
-
-
 int _tmain()
 {
     set<DWORD> seenPIDs;
