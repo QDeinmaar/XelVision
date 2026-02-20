@@ -1,7 +1,23 @@
 #include "headers.h"
 
-#include "headers.h"
 
+
+int _tmain()
+{
+    set<DWORD> seenPIDs;
+
+    while(true)
+    {
+        DetectNewProcess(seenPIDs);
+        Sleep(2000); // check every 2 seconds
+    }
+}
+
+
+
+
+
+/*
 int _tmain(int argc, TCHAR* argv[])
 {
     while(TRUE)
@@ -20,6 +36,7 @@ int _tmain(int argc, TCHAR* argv[])
 
     return 0;
 }
+*/
 /*
 BOOL GetProcessList( );
 

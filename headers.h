@@ -17,6 +17,7 @@ extern PROCESSENTRY32 pe32;
 
 // Function prototypes
 BOOL GetProcessList( );
+BOOL DetectNewProcess(set<DWORD> &seenPIDs);
 BOOL ListProcessModules( DWORD dwPID );
 BOOL ListProcessThreads( DWORD dwOwnerPID );
 void print_error(TCHAR const* msg);
